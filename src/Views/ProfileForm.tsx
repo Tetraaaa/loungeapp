@@ -1,6 +1,7 @@
 import {
     Button,
     Card,
+    Flex,
     Image,
     Select,
     Stack,
@@ -10,9 +11,22 @@ import {
 import { DateInput } from "@mantine/dates";
 import { Form, useForm } from "@mantine/form";
 import BirthPlaceInput from "../Components/BirthPlaceInput";
+import dayjs from "dayjs";
 
 export default function ProfileForm() {
-    const form = useForm({
+    interface FormValues {
+        gender: "M" | "F" | "X";
+        firstname: string;
+        lastname: string;
+        email: string;
+        phoneNumber: string;
+        birthDate: string;
+        birthPlace: {
+            city: string;
+            state: string;
+        };
+    }
+    const form = useForm<FormValues>({
         initialValues: {
             gender: "M",
             firstname: "",
@@ -25,7 +39,33 @@ export default function ProfileForm() {
                 state: "",
             },
         },
+        validate: {
+            firstname: (value) =>
+                value !== "" ? null : "Merci de renseigner votre prénom",
+            lastname: (value) =>
+                value !== "" ? null : "Merci de renseigner votre nom",
+            birthDate: (value) =>
+                value
+                    ? dayjs(value) >= dayjs()
+                        ? "La date de naissance semble incorrecte"
+                        : null
+                    : "Merci de renseigner votre date de naissance",
+            email: (value) =>
+                /^\S+@\S+$/.test(value) ? null : "L'adresse email est invalide",
+            phoneNumber: (value) =>
+                /^(?:(?:\+|00)33|0)\s*[1-9](?:[\s.-]*\d{2}){4}$/.test(value)
+                    ? null
+                    : "Le numéro de téléphone est invalide",
+        },
+        transformValues: (values) => ({
+            ...values,
+            birthDate: dayjs(values.birthDate).format("YYYY-MM-DD"),
+        }),
     });
+
+    function onSubmit() {
+        console.log(form.getTransformedValues());
+    }
     return (
         <Stack align="center" bg="red.2" p="md" mih="100vh">
             <Card
@@ -41,7 +81,7 @@ export default function ProfileForm() {
                     <Image w="10%" src={"/loungeup.svg"} />
                     <Title flex="1">Formulaire</Title>
                 </Stack>
-                <Form form={form}>
+                <Form form={form} onSubmit={onSubmit}>
                     <Select
                         label="Genre"
                         data={[
@@ -91,9 +131,11 @@ export default function ProfileForm() {
                             form.setFieldValue("birthPlace", value);
                         }}
                     />
-                    <Button color="red" type="submit" mt="sm">
-                        Enregistrer
-                    </Button>
+                    <Flex justify="flex-end">
+                        <Button color="red" type="submit" mt="sm">
+                            Enregistrer
+                        </Button>
+                    </Flex>
                 </Form>
             </Card>
         </Stack>
