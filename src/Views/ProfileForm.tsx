@@ -1,4 +1,12 @@
-import { Button, Card, Select, Stack, TextInput } from "@mantine/core";
+import {
+    Button,
+    Card,
+    Image,
+    Select,
+    Stack,
+    TextInput,
+    Title,
+} from "@mantine/core";
 import { DateInput } from "@mantine/dates";
 import { Form, useForm } from "@mantine/form";
 import BirthPlaceInput from "../Components/BirthPlaceInput";
@@ -19,8 +27,20 @@ export default function ProfileForm() {
         },
     });
     return (
-        <Stack>
-            <Card>
+        <Stack align="center" bg="red.2" p="md" mih="100vh">
+            <Card
+                shadow="sm"
+                padding="lg"
+                radius="md"
+                withBorder
+                miw="15rem"
+                maw="50rem"
+                w="80%"
+            >
+                <Stack align="center">
+                    <Image w="10%" src={"/loungeup.svg"} />
+                    <Title flex="1">Formulaire</Title>
+                </Stack>
                 <Form form={form}>
                     <Select
                         label="Genre"
