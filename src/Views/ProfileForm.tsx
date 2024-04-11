@@ -1,6 +1,7 @@
 import { Button, Card, Select, Stack, TextInput } from "@mantine/core";
 import { DateInput } from "@mantine/dates";
 import { Form, useForm } from "@mantine/form";
+import BirthPlaceInput from "../Components/BirthPlaceInput";
 
 export default function ProfileForm() {
     const form = useForm({
@@ -65,11 +66,11 @@ export default function ProfileForm() {
                         label="Date de naissance"
                         withAsterisk
                     ></DateInput>
-                    <TextInput
-                        {...form.getInputProps("birthPlace")}
-                        label="Lieu de naissance"
-                        withAsterisk
-                    ></TextInput>
+                    <BirthPlaceInput
+                        onChange={(value) => {
+                            form.setFieldValue("birthPlace", value);
+                        }}
+                    />
                     <Button color="red" type="submit" mt="sm">
                         Enregistrer
                     </Button>
