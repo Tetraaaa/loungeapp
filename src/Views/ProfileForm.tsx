@@ -1,6 +1,8 @@
 import {
+    Alert,
     Button,
     Card,
+    Code,
     Flex,
     Image,
     Select,
@@ -12,6 +14,7 @@ import { DateInput } from "@mantine/dates";
 import { Form, useForm } from "@mantine/form";
 import BirthPlaceInput from "../Components/BirthPlaceInput";
 import dayjs from "dayjs";
+import { useState } from "react";
 
 export default function ProfileForm() {
     interface FormValues {
@@ -26,6 +29,9 @@ export default function ProfileForm() {
             state: string;
         };
     }
+
+    const [formData, setFormData] = useState(null);
+
     const form = useForm<FormValues>({
         initialValues: {
             gender: "M",
@@ -64,7 +70,7 @@ export default function ProfileForm() {
     });
 
     function onSubmit() {
-        console.log(form.getTransformedValues());
+        setFormData(form.getTransformedValues());
     }
     return (
         <Stack align="center" bg="red.2" p="md" mih="100vh">
@@ -137,6 +143,11 @@ export default function ProfileForm() {
                         </Button>
                     </Flex>
                 </Form>
+                {formData && (
+                    <Alert title="Formulaire envoyé 🎉" color="green">
+                        <Code>{JSON.stringify(formData, null, "\t")}</Code>
+                    </Alert>
+                )}
             </Card>
         </Stack>
     );
